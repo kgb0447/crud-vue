@@ -1,5 +1,14 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
+  /* Semantic Variables */
+  --primary-color: hsla(160, 100%, 37%, 1);
+  --secondary-color: #FFD166;
+
+  /* Contextual Variables */
+  --btn-primary: #00BF9C;
+  
+  --primary-bg: #F5F5F5;
+
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
