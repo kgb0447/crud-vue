@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUpdated, onBeforeMount } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import ViewTaskModal from './components/icons/ViewTaskModal.vue';
 import ErrorModal from './ErrorModal.vue';
 import CompletedTaskModal from './CompletedTaskModal.vue'
@@ -8,14 +8,7 @@ const tasks = ref([]);
 const selectedTask = ref({title:'',desc:''});
 const shouldShowError = ref(false)
 const shouldShowCompleted = ref(false)
-
-// onMounted(() => {
-    window.addEventListener('storage',(e) => {
-        if(e.key === 'completedTasks'){
-            console.log("Value changed")
-        }
-    })
-// })
+const completedTasksRef = ref([])
 
 const handleSubmit = (e) => {
   e.preventDefault();
@@ -51,11 +44,15 @@ const handleClose = () => {
 
 const handleDelete = () => {
   const selectedIndex = tasks.value.findIndex(item=> item.title === selectedTask.value.title);
-  // console.log(selectedIndex,'aaaa')
   if(selectedIndex === -1) return;
  tasks.value.splice(selectedIndex,1);
   handleClose()
 }
+onMounted(() => {
+  const completedItems = JSON.parse(localStorage.getItem('completedTasks'));
+  completedTasksRef.value = completedItems;
+
+})
 
 const handleComplete = () => {
   let completedItems = JSON.parse(localStorage.getItem('completedTasks'));
@@ -64,8 +61,10 @@ const handleComplete = () => {
   };
   completedItems.push(selectedTask.value);
   localStorage.setItem('completedTasks',JSON.stringify(completedItems));
+  completedTasksRef.value = completedItems;
   handleDelete();
 }
+
 </script>
 <template>
   <div class="container">
@@ -122,7 +121,9 @@ const handleComplete = () => {
     />
     <CompletedTaskModal :visible="shouldShowCompleted" :closeFn="() => {
       shouldShowCompleted=false
-    }"/>
+    }"
+    :tasks="completedTasksRef"
+    />
   </div>
 
 </template>

@@ -1,11 +1,6 @@
 <script setup>
-import { computed, onMounted } from 'vue';
 
-const props = defineProps(['visible', 'closeFn'])
-const tasks = computed(() =>  JSON.parse(localStorage.getItem('completedTasks')));
-
-
-
+const props = defineProps(['visible', 'closeFn','tasks'])
 </script>
 <template>
     <div class="modal-wrapper" :style="visible ? `display: flex;`: `display:none;`" role="dialog">
@@ -13,7 +8,7 @@ const tasks = computed(() =>  JSON.parse(localStorage.getItem('completedTasks'))
             <h2>Completed Tasks</h2>
         </header>
         <section class="completed-task-container">
-            <div v-if="!tasks">You have not completed any task yet</div>
+            <div v-if="tasks?.length <= 0">You have not completed any task yet</div>
             <div v-for="item in tasks" class="item-wrapper" v-else>
                 <label for="title" id="title">Title:</label>
                 <div>{{ item.title }}</div>

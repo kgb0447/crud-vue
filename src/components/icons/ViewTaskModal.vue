@@ -12,8 +12,8 @@
     </div>
         <footer>
             <button class="btn btn--close" v-on:click="onClose">Close</button>
-            <button class="btn btn--complete" v-on:click="onDelete">Delete</button>
-            <button class="btn btn--delete" v-on:click="onComplete">Complete</button>
+            <button class="btn btn--delete" v-on:click="onDelete">Delete</button>
+            <button class="btn btn--complete" v-on:click="onComplete">Complete</button>
         </footer>
     </dialog>
 </template>
@@ -74,11 +74,11 @@ footer{
 }
 
 .btn--close{
-    background-color: red;
+    background-color: var(--vt-c-indigo);
 }
 .btn--complete{
-    background-color: green;
+    background-color: var(--btn-primary);
 }.btn--delete{
-    background-color: yellow;
+    background-color: red;
 }
 </style>
