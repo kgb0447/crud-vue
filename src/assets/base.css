@@ -1,9 +1,21 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   /* Semantic Variables */
-  --primary-color: hsla(160, 100%, 37%, 1);
-  --secondary-color: #FFD166;
+  --primary-color: #28CB8B;
+  --secondary-color: #263238;
+  --info-color: #2194f3;
 
+
+  /* Color Shades */
+  --primary-shade-1: #43A046;
+  --primary-shade-2:#388E3B;
+  --primary-shade-3:#237D31;
+  --primary-shade-4:#1B5E1F;
+  --primary-shade-5:#103E13;
+
+
+  /* Text Colors */
+  --neutral-grey: #717171;
   /* Contextual Variables */
   --btn-primary: #00BF9C;
   

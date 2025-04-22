@@ -1,129 +1,23 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import ViewTaskModal from './components/icons/ViewTaskModal.vue';
-import ErrorModal from './ErrorModal.vue';
-import CompletedTaskModal from './CompletedTaskModal.vue'
-const inputs = ref({});
-const tasks = ref([]);
-const selectedTask = ref({title:'',desc:''});
-const shouldShowError = ref(false)
-const shouldShowCompleted = ref(false)
-const completedTasksRef = ref([])
-
-const handleSubmit = (e) => {
-  e.preventDefault();
-  const alReadyExist = !!tasks.value.find(item => item.title === inputs.value.title);
-  if(alReadyExist) {
-    shouldShowError.value = true
-  } else {
-    tasks.value.push({ ...inputs.value })
-    inputs.value = {};
-  }
-}
-
-const fields = [
-  { id: 1, label: 'Title', value: 'title', type: 'text' },
-  { id: 2, label: 'Description', value: 'description', type: 'textarea' },
-  // { id: 3, label: 'Start Date: ', value: 'date', type: 'date' },
-]
-
-const isFormValid = computed(() => {
-  return fields.every(field => inputs.value[field.value] && inputs.value[field.value].toString().trim().length > 0);
-});
-
-const handleSelect = (item) => {
-  selectedTask.value = {
-    desc: item.description,
-    title:item.title
-  }
-}
-
-const handleClose = () => {
-  selectedTask.value = {title:'',desc:''}
-}
-
-const handleDelete = () => {
-  const selectedIndex = tasks.value.findIndex(item=> item.title === selectedTask.value.title);
-  if(selectedIndex === -1) return;
- tasks.value.splice(selectedIndex,1);
-  handleClose()
-}
-onMounted(() => {
-  const completedItems = JSON.parse(localStorage.getItem('completedTasks'));
-  completedTasksRef.value = completedItems;
-
-})
-
-const handleComplete = () => {
-  let completedItems = JSON.parse(localStorage.getItem('completedTasks'));
-  if(completedItems === null) {
-    completedItems = []
-  };
-  completedItems.push(selectedTask.value);
-  localStorage.setItem('completedTasks',JSON.stringify(completedItems));
-  completedTasksRef.value = completedItems;
-  handleDelete();
-}
-
+import { useRouter } from 'vue-router';
+import homeNav from './navigation/routes/homeNav';
+const {push} = useRouter()
 </script>
 <template>
   <div class="container">
-    <div class="task-container">
-    <div class="wrapper">
-      <form @submit="handleSubmit" method="post">
-        <div v-for="field in fields">
-          <label :for="field.value">{{ field.label }}</label>
-          <input v-if="field.type !== 'textarea'" :type="field.type" :name="field.value" :id="field.value"
-            class="fields" :placeholder="`Please enter your ${field.label}: `" v-model="inputs[field.value]"
-            autocomplete="off">
-          <textarea v-else-if="field.type === 'textarea'" :name="field.value" :id="field.value" cols="30" rows="10"
-            class="fields textarea" :placeholder="`Please enter your ${field.label}: `"
-            v-model="inputs[field.value]"></textarea>
-        </div>
-        <div class="btnWrapper">
-          <input type="submit" value="Submit" class="btn" :disabled="!isFormValid">
-        </div>
-      </form>
+    <nav>
+    <div class="logo">KProjects</div>
+    <div class="right-navigation">
+    <div v-for="route in homeNav" class="nav-btn-wrapper">
+      <button type="button" class="nav-btn" v-on:click="() => {
+        push(route.path)
+      }">{{ route.name }}</button>
+      <div class="nav-indicator"></div>
     </div>
-    <section class="task-section">
-      <header>Tasks: </header>
-      <div class="task-wrapper">
-      <div class="task-item" v-for="item in tasks" role="button" v-on:click="handleSelect(item)">
-        <div>{{ item.title }}</div>
-        <div>{{ item.description }}</div>
-      </div>
+    <button class="contact-btn" type="button">Contact Me Now!</button>
     </div>
-    </section>
-  </div>
-  <footer class="main-footer">
-      <button type="button" class="btn btn--view-completed" v-on:click="() => {
-        shouldShowCompleted = true
-      }">
-        View Completed Tasks
-      </button>
-    </footer>
-
-    <ViewTaskModal 
-    :visible="!!selectedTask?.title" 
-    :title="selectedTask.title" 
-    :message="selectedTask.desc"
-    :onClose="handleClose"
-    :onDelete="handleDelete"
-    :onComplete="handleComplete"
-    />
-    <ErrorModal 
-      :visible="shouldShowError"
-      :title="`Duplicate Task!`"
-      :message="`This task already exist. Please try a different title for your task. Thank you`"
-      :onClose="() => {
-        shouldShowError = false;
-      }"
-    />
-    <CompletedTaskModal :visible="shouldShowCompleted" :closeFn="() => {
-      shouldShowCompleted=false
-    }"
-    :tasks="completedTasksRef"
-    />
+    </nav>
+     <router-view/>
   </div>
 
 </template>
@@ -136,7 +30,57 @@ const handleComplete = () => {
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
+  padding: 0px;
+}
+nav{
+    display: flex;
+    background-color:#fff;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo{
+  color: var(--secondary-color);
+  font-weight: 800;
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.nav-btn-wrapper{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.nav-btn{
+    background-color: transparent;
+    border:unset;
+    outline: 0px;
+    cursor: pointer;
+    color: var(--neutral-grey);
+    font-size: 17px;
+}
+.nav-btn:hover + .nav-indicator {
+    width: 80%;
+}
+.nav-indicator{
+    width: 0;
+    height: 5px;
+    background-color: var(--secondary-color);
+    transition: 800ms;
+    border-radius: 4px;
+}
+.contact-btn{
+  background-color: var(--primary-color);
+  color: #fff;
+  font-size: 1rem;
   padding: 20px;
+  border: 0;
+  border-radius: 4px;
+}
+.right-navigation{
+    display: flex;
+    flex: 1;
+    padding-top: 5px;
+    justify-content: flex-end;
+    gap: 20px;
 }
 .task-container{
   display: flex;
