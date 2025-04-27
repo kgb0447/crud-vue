@@ -12,7 +12,6 @@ const {push} = useRouter()
       <button type="button" class="nav-btn" v-on:click="() => {
         push(route.path)
       }">{{ route.name }}</button>
-      <div class="nav-indicator"></div>
     </div>
     <button class="contact-btn" type="button">Contact Me Now!</button>
     </div>
@@ -48,17 +47,31 @@ nav{
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    align-items: center;
 }
 .nav-btn{
     background-color: transparent;
+    position: relative;
     border:unset;
     outline: 0px;
     cursor: pointer;
     color: var(--neutral-grey);
     font-size: 17px;
 }
-.nav-btn:hover + .nav-indicator {
-    width: 80%;
+.nav-btn::after{
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+   width: 0;
+   height: 5px;
+   border-radius: 3px;
+   transition-duration: 600ms;
+   background-color:var(--primary-color);
+}
+.nav-btn:hover::after {
+  width:100%;
 }
 .nav-indicator{
     width: 0;

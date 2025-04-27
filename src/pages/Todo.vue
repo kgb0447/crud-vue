@@ -138,7 +138,6 @@ const handleComplete = () => {
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  /* padding: 20px; */
 }
 .task-container{
   display: flex;
