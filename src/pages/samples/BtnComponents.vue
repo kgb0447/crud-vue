@@ -1,7 +1,7 @@
 <script setup></script>
 <template>
   <div class="wrapper">
-    <h2>Button Hover Animations</h2>
+    <h2 class="title">Button Hover Animations</h2>
   <section>
   <button class="base-btn bottom-border">
     <div class="bottom-border-label" >Bottom Border</div>
@@ -14,13 +14,16 @@
 </section>
 </div>
 </template>
-<style>
+<style scoped>
 
 .wrapper{
   width: 100%;
   height: 100%;
   border-radius: 0;
-  background-color: var(--vt-c-black) !important;
+  background-color: var(--vt-c-black);
+}
+.title{
+  color: #fff;
 }
 section{
   display:grid;

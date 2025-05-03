@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import ErrorModal from '@/ErrorModal.vue';
 import CompletedTaskModal from '@/CompletedTaskModal.vue'
 import ViewTaskModal from '@/components/icons/ViewTaskModal.vue';
-import { useRouter } from 'vue-router';
+import {useRoute, useRouter } from 'vue-router';
 const inputs = ref({});
 const tasks = ref([]);
 const selectedTask = ref({title:'',desc:''});
@@ -11,8 +11,10 @@ const shouldShowError = ref(false)
 const shouldShowCompleted = ref(false)
 const completedTasksRef = ref([])
 const router= useRouter();
+const route= useRoute()
+
 const handleSubmit = (e) => {
-  e.preventDefault();
+  // e.preventDefault(); // not necessary if the directive uses the "prevent" modifier
   const alReadyExist = !!tasks.value.find(item => item.title === inputs.value.title);
   if(alReadyExist) {
     shouldShowError.value = true
@@ -38,7 +40,6 @@ const handleSelect = (item) => {
     title:item.title
   }
 }
-
 const handleClose = () => {
   selectedTask.value = {title:'',desc:''}
 }
@@ -71,7 +72,7 @@ const handleComplete = () => {
   <div class="container">
     <div class="task-container">
     <div class="wrapper">
-      <form @submit="handleSubmit" method="post">
+      <form @submit.prevent="handleSubmit" method="post">
         <div v-for="field in fields">
           <label :for="field.value">{{ field.label }}</label>
           <input v-if="field.type !== 'textarea'" :type="field.type" :name="field.value" :id="field.value"
@@ -97,11 +98,9 @@ const handleComplete = () => {
     </section>
   </div>
   <footer class="main-footer">
-      <button type="button" class="btn btn--view-completed" v-on:click="() => {
-        router.push('/todo/completed-task')
-      }">
+    <RouterLink to='/todo/completed-task'>
         View Completed Tasks
-      </button>
+    </RouterLink>
     </footer>
 
     <ViewTaskModal 
@@ -125,8 +124,7 @@ const handleComplete = () => {
     }"
     :tasks="completedTasksRef"
     />
-    <router-view /> 
-  </div>
+</div>
 
 </template>
 

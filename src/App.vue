@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import homeNav from './navigation/routes/homeNav';
+import navRoutes from './navigation/routes/navRoutes';
 const {push} = useRouter()
 </script>
 <template>
@@ -8,7 +8,7 @@ const {push} = useRouter()
     <nav>
     <div class="logo">KProjects</div>
     <div class="right-navigation">
-    <div v-for="route in homeNav" class="nav-btn-wrapper">
+    <div v-for="route in navRoutes" class="nav-btn-wrapper">
       <button type="button" class="nav-btn" v-on:click="() => {
         push(route.path)
       }">{{ route.name }}</button>
@@ -16,9 +16,9 @@ const {push} = useRouter()
     <button class="contact-btn" type="button">Contact Me Now!</button>
     </div>
     </nav>
-     <router-view/>
+  <router-view/>
+    
   </div>
-
 </template>
 
 <style scoped>
@@ -36,6 +36,7 @@ nav{
     background-color:#fff;
     justify-content: space-between;
     align-items: center;
+    padding: 0 10px  0 10px;
 }
 .logo{
   color: var(--secondary-color);
@@ -102,17 +103,6 @@ nav{
   gap: 10px;
   box-sizing: border-box;
   flex-wrap: wrap;
-}
-.wrapper {
-  flex: 1;
-  flex-grow: 1;
-  flex-shrink: 0;
-
-  /* width: 100dvw; */
-  justify-content: center;
-  background-color: var(--primary-color);
-  padding: 20px;
-  border-radius: 20px
 }
 label{
   color: #fff;
